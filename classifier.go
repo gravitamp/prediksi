@@ -109,14 +109,6 @@ func (c *Classifier) pDocumentCategory(category string, condition string) float6
 // p (condition numerical | category)
 func (c *Classifier) pNumericalCategory(category float64, condition string, cond float64) float64 {
 	d := NormalDist{c.avg(condition, category), c.stdev(condition, category)}
-	for i := 0; i < len(condition); i++ {
-		if c.datatrain[i]["cuaca"] != category {
-			continue
-		}
-		// cond, _ := c.datatrain[i][condition]
-		// fmt.Println(cond)
-	}
-	// cond, _ := strconv.ParseFloat(, 64)
 	return (d.PDF(cond))
 }
 

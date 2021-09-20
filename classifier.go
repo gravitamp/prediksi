@@ -35,7 +35,7 @@ func NewClassifier(categories []string, threshold float64) Classifier {
 	return c
 }
 func (c *Classifier) addDataTrain(cond Condition) {
-	c.datatrain = append(c.datatest, cond)
+	c.datatrain = append(c.datatrain, cond)
 }
 func (c *Classifier) addDataTest(cond Condition) {
 	c.datatest = append(c.datatest, cond)

@@ -49,20 +49,14 @@ func main() {
 	for _, doc := range train {
 		nb.Train(doc.class, doc.time)
 	}
-	// NormalDist{
-	// 	nb.avg("dmin", CUACA_HUJAN),
-	// 	nb.stdev("dmin", CUACA_HUJAN),
-	// }
-	a := NormalDist{nb.avg("dmin", CUACA_CERAH), nb.stdev("dmin", CUACA_CERAH)}
-	fmt.Println("hasil training", nb.categoriesDocuments, a)
+	// a := NormalDist{nb.avg("dmin", CUACA_CERAH), nb.stdev("dmin", CUACA_CERAH)}
+	// fmt.Println("hasil training", nb.categoriesDocuments, a)
 	// validate on test dataset
 	count, accurates, unknowns := 0, 0, 0
 	for i, doc := range test {
 		count++
-		sentiment := nb.Classify(doc.time, nb.datatrain[i]["dmin"], nb.datatrain[i]["dmax"],
-			nb.datatrain[i]["tmin"], nb.datatrain[i]["tmax"])
-		// fmt.Println(nb.datatrain[i]["dmin"], nb.datatrain[i]["dmax"],
-		// 	nb.datatrain[i]["tmin"], nb.datatrain[i]["tmax"])
+		sentiment := nb.Classify(doc.time, nb.datatest[i]["dmin"], nb.datatest[i]["dmax"],
+			nb.datatest[i]["tmin"], nb.datatest[i]["tmax"])
 		if sentiment == doc.class {
 			accurates++
 		}
@@ -72,20 +66,21 @@ func main() {
 	}
 	fmt.Printf("Accuracy on TEST dataset is %2.1f%% with %2.1f%% unknowns",
 		float64(accurates)*100/float64(count), float64(unknowns)*100/float64(count))
-	// // validate on the first 100 docs in the train dataset
-	// for i, doc := range train[0:100] {
-	// 	count++
-	// 	sentiment := nb.Classify(doc.time, nb.datatrain[i]["dmin"], nb.datatrain[i]["dmax"],
-	// 		nb.datatrain[i]["tmin"], nb.datatrain[i]["tmax"])
-	// 	if sentiment == doc.class {
-	// 		accurates++
-	// 	}
-	// 	if sentiment == "unknown" {
-	// 		unknowns++
-	// 	}
-	// }
-	// fmt.Printf("\nAccuracy on TRAIN dataset is %2.1f%% with %2.1f%% unknowns",
-	// 	float64(accurates)*100/float64(count), float64(unknowns)*100/float64(count))
+	// validate on the first 100 docs in the train dataset
+	count, accurates, unknowns = 0, 0, 0
+	for i, doc := range train[0:100] {
+		count++
+		sentiment := nb.Classify(doc.time, nb.datatrain[i]["dmin"], nb.datatrain[i]["dmax"],
+			nb.datatrain[i]["tmin"], nb.datatrain[i]["tmax"])
+		if sentiment == doc.class {
+			accurates++
+		}
+		if sentiment == "unknown" {
+			unknowns++
+		}
+	}
+	fmt.Printf("\nAccuracy on TRAIN dataset is %2.1f%% with %2.1f%% unknowns",
+		float64(accurates)*100/float64(count), float64(unknowns)*100/float64(count))
 }
 
 func (c *Classifier) setupData(file string) {
